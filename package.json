@@ -1,0 +1,25 @@
+{
+  "name": "mnistwisard",
+  "version": "1.0.0",
+  "description": "wisard implementation in TS to classify mnist dataset",
+  "main": "mnist.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/thiagomachado/mnistWISARD"
+  },
+  "keywords": [
+    "mnist",
+    "wisard",
+    "weightless",
+    "neural",
+    "network"
+  ],
+  "author": "Thiago Machado",
+  "license": "MIT",
+  "dependencies": {
+    "webpack": "^4.16.0"
+  }
+}
