@@ -19,7 +19,13 @@
   ],
   "author": "Thiago Machado",
   "license": "MIT",
-  "dependencies": {
-    "webpack": "^4.16.0"
+  "dependencies": {},
+  "devDependencies": {
+    "awesome-typescript-loader": "^5.2.0",
+    "source-map-loader": "^0.2.3",
+    "typescript": "^2.9.2",
+    "webpack": "^4.16.0",
+    "webpack-cli": "^3.0.8",
+    "webpack-command": "^0.4.1"
   }
 }

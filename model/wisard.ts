@@ -1,4 +1,6 @@
-class wisard
+import {Discriminator} from './discriminator';
+
+class Wisard
 {
     discriminators : Array<Discriminator>;
     classesQuantity: number;
@@ -9,3 +11,5 @@ class wisard
         this.discriminators = new Array(classesQuantity);   
     }
 }
+
+export {Wisard as Wisard};

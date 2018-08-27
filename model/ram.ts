@@ -13,3 +13,5 @@ class Ram {
     }
     
 }
+
+export {Ram as Ram};
