@@ -10,6 +10,11 @@ class Wisard
         this.classesQuantity = classesQuantity;
         this.discriminators = new Array(classesQuantity);   
     }
+
+    public train() 
+    {
+
+    }
 }
 
 export {Wisard as Wisard};

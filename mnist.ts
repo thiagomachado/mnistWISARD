@@ -15,9 +15,11 @@ class StartUp
         return 0;
     }
 
-    public static  readMnistFile(fileName : String) : void{
+    public static  readMnistFile(fileName : String) : void
+    {
         var encode = {encoding: 'utf-8'};
-        var data = fs.readFile(fileName, encode, function(err : any,data : any){
+        var data = fs.readFile(fileName, encode, function(err : any,data : any)
+        {
             console.log(data[0]);            
         } );
     }

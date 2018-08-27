@@ -11,6 +11,11 @@ class Ram {
        this.inputSize = inputSize;
        this.addresses  = new Array(inputSize); 
     }
+
+    public train()
+    {
+        
+    }
     
 }
 
