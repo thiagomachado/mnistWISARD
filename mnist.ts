@@ -9,7 +9,7 @@ class StartUp
 {
     public static main() :number
     {
-        var wisard = new Wisard(2);
+        var wisard = new Wisard(2,);
         
         console.log(this.readMnistFile(mnistTrainFile))
         return 0;

@@ -1,15 +1,18 @@
 import {Ram} from "./ram";
 
 class Discriminator
-{
-    ramQuantity : number;
+{    
     rams: Array<Ram>;
     
-    constructor(ramQuantity : number) 
+    constructor(addressesSize : Array<number>) 
     {
-        this.ramQuantity = ramQuantity;
-        this.rams = new Array(ramQuantity);
-
+        
+        this.rams = new Array(addressesSize.length);
+        for(var i=0; i < addressesSize.length; i++)
+        {
+            var ram : Ram = new Ram(addressesSize[i]);
+            this.rams.push(ram);
+        }
     }
 
     //to do: metodos para treinar e classificar
