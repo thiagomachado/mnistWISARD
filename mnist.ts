@@ -9,9 +9,10 @@ class StartUp
 {
     public static main() :number
     {
-        var wisard = new Wisard(2,);
+        var wisard = new Wisard(2,27,4);
         
-        console.log(this.readMnistFile(mnistTrainFile))
+        console.log(this.readMnistFile(mnistTrainFile));
+        console.log(wisard.mapping);
         return 0;
     }
 
@@ -21,6 +22,7 @@ class StartUp
             console.log(data[0]);            
         } );
     }
+
 }
 
 

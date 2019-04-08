@@ -1,14 +1,15 @@
-class Ram {
-
-    //to do: utilizar map
+class Ram 
+{
     addresses : Array<number>;
 
-
-    constructor(inputSize : number) 
+    constructor(ramInputSize : number) 
     {       
-       this.addresses  = new Array(inputSize); 
-    }
-    
+       this.addresses = new Array(ramInputSize);
+       for(var i = 0; i < this.addresses.length; i++)
+       {
+           this.addresses[i] = 0;
+       }       
+    }    
 }
 
 export {Ram as Ram};

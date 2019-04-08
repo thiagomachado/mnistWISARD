@@ -5,29 +5,40 @@ class Wisard
     discriminators : Array<Discriminator>;
     classesQuantity: number;
     inputSize: number;
+    mapping : Array<Array<number>>;
 
-    constructor(classesQuantity : number, inputSize : number, addressesSize : number )
+    constructor(classesQuantity : number, inputSize : number, nbits : number )
     {
         this.classesQuantity = classesQuantity;
         this.discriminators = new Array(classesQuantity); 
         this.inputSize = inputSize; 
+        this.mapping = this.getMapping(nbits);
         for(var i = 0; i < this.discriminators.length; i++)
         {
-            var discriminator : Discriminator = new Discriminator()
+            var discriminator : Discriminator = new Discriminator(this.mapping);
         }       
     }
 
-    mapping(inputSize : number, addressesSize : number) : Array<Array<number>>
+    private generateAdresses(inputSize : number) : Array<number> 
     {
-        var shuffledInput = this.getShuffledInput(inputSize);
-        var ramQuantity = Math.ceil(inputSize/addressesSize);
+        var adresses :Array<number> = [];
+        
+
+        return adresses;
+    }
+
+   private getMapping( addressesSize : number) : Array<Array<number>>
+    {
+        var shuffledInput = this.getShuffledInput();        
+        var ramQuantity = Math.ceil(this.inputSize/addressesSize);
         var mapping = new Array(ramQuantity);
         var start = 0;
 
         for (var i = 0; i < mapping.length; i++)
         {
             var end = start + addressesSize;
-            if(i >= inputSize%addressesSize)
+            
+            if(i >= this.inputSize%ramQuantity)
             {
                 end --;
             }
@@ -38,12 +49,12 @@ class Wisard
         return mapping;    
     }
 
-    getShuffledInput(inputSize : number)  : Array<number>
+    getShuffledInput()  : Array<number>
     {
-        var input = new Array(inputSize);
+        var input = new Array(this.inputSize);
         var j, x, i : number;
 
-        for( i = 0; i< inputSize; i++)
+        for( i = 0; i< this.inputSize; i++)
         {
             input[i] = i;
         }

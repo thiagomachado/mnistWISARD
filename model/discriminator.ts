@@ -3,14 +3,16 @@ import {Ram} from "./ram";
 class Discriminator
 {    
     rams: Array<Ram>;
+    mapping: Array<Array<number>>
+    classDescription: String;
     
-    constructor(addressesSize : Array<number>) 
+    constructor(mapping : Array<Array<number>>) 
     {
-        
-        this.rams = new Array(addressesSize.length);
-        for(var i=0; i < addressesSize.length; i++)
+        this.mapping = mapping;   
+        this.rams = [];
+        for(var i=0; i < mapping.length; i++)
         {
-            var ram : Ram = new Ram(addressesSize[i]);
+            var ram : Ram = new Ram(mapping[i].length);            
             this.rams.push(ram);
         }
     }
