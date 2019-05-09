@@ -2,7 +2,7 @@ import {Discriminator} from './discriminator';
 
 class Wisard
 {
-    discriminators : Array<Discriminator>;
+    discriminators : Map<Number,Discriminator>;
     classesQuantity: number;
     inputSize: number;
     mapping : Array<Array<number>>;
@@ -10,21 +10,20 @@ class Wisard
     constructor(classesQuantity : number, inputSize : number, nbits : number )
     {
         this.classesQuantity = classesQuantity;
-        this.discriminators = new Array(classesQuantity); 
+        this.discriminators = new Map(); 
         this.inputSize = inputSize; 
         this.mapping = this.getMapping(nbits);
-        for(var i = 0; i < this.discriminators.length; i++)
+        for(var i = 0; i < this.classesQuantity; i++)
         {
             var discriminator : Discriminator = new Discriminator(this.mapping);
+            this.discriminators.set(i, discriminator);
         }       
     }
 
-    private generateAdresses(inputSize : number) : Array<number> 
+    private generateAddresses(inputSize : number) : Array<number> 
     {
-        var adresses :Array<number> = [];
-        
-
-        return adresses;
+        var addresses :Array<number> = [];        
+        return addresses;
     }
 
    private getMapping( addressesSize : number) : Array<Array<number>>
@@ -36,20 +35,21 @@ class Wisard
 
         for (var i = 0; i < mapping.length; i++)
         {
-            var end = start + addressesSize;
-            
-            if(i >= this.inputSize%ramQuantity)
+            var end = start + addressesSize;                    
+
+            if(i < this.inputSize%ramQuantity)
             {
-                end --;
+                end ++;
             }
+            
 
             mapping[i] = shuffledInput.slice(start, end);
             start = end;
-        }
+        }        
         return mapping;    
     }
 
-    getShuffledInput()  : Array<number>
+    private getShuffledInput() : Array<number>
     {
         var input = new Array(this.inputSize);
         var j, x, i : number;
@@ -67,6 +67,23 @@ class Wisard
         }
         return input;
     }
+
+    public training(discriminatorClass : Number, input : String )
+    {        
+        this.discriminators.get(discriminatorClass).training(input);
+       // console.log(this.discriminators.get(7).rams[0] );
+    }
+
+    public retrieve(input : String) : Array<Array<Number>>
+    {
+        var similarityScores = new Array<Array<Number>>();
+        this.discriminators.forEach(discriminator => {
+            discriminator.retrieve(input);            
+        });
+        return similarityScores;
+    }
+
+
 }
 
 export {Wisard as Wisard};

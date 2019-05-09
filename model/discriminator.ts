@@ -4,19 +4,68 @@ class Discriminator
 {    
     rams: Array<Ram>;
     mapping: Array<Array<number>>
-    classDescription: String;
     
     constructor(mapping : Array<Array<number>>) 
     {
         this.mapping = mapping;   
         this.rams = [];
         for(var i=0; i < mapping.length; i++)
-        {
-            var ram : Ram = new Ram(mapping[i].length);            
-            this.rams.push(ram);
+        {                
+            this.rams.push(new Ram());
         }
     }
 
+    public training(input : String)
+    {
+        var addresses = this.convertInputToAddresses(input); 
+        for(var i = 0; this.rams.length > i; i++)
+        {
+            var value = 0;
+            if(this.rams[i].addresses.has(addresses[i]))
+            {
+                value = this.rams[i].addresses.get(addresses[i]);
+                
+            }
+            value ++;
+            this.rams[i].addresses.set(addresses[i], value);
+            
+        }
+        
+    }
+
+    private convertInputToAddresses(input : String) : Array<String>
+    {
+        var addresses = [];
+        for(var i = 0; this.mapping.length > i; i++)
+        {
+            var address:String = "";
+            for(var j=0; this.mapping[i].length >j; j++)
+            {
+               address += input[this.mapping[i][j]];
+            }
+            addresses.push(address);
+        }
+    
+        return addresses;
+    }
+
+    public retrieve(input : String) : Array<Number>
+    {
+        var ramsContent = new Array<Number>();
+        var addresses = this.convertInputToAddresses(input);
+        for(var i = 0; addresses.length > i; i++)
+        {
+            if(this.rams[i].addresses.has(addresses[i]))
+            {
+                ramsContent.push(this.rams[i].addresses.get(addresses[i]));
+            }
+            else
+            {
+                ramsContent.push(0);  
+            }            
+        }
+        return ramsContent;
+    }
     //to do: metodos para treinar e classificar
         //treinamento: percorrer todas as rams incrementando as posições acessadas.
         //classificação:retornar um vetor com o conteudo acessado em cada ram
