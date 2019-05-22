@@ -6,6 +6,7 @@ class Wisard
     classesQuantity: number;
     inputSize: number;
     mapping : Array<Array<number>>;
+    similarityScores : Array<Array<Number>>;
 
     constructor(classesQuantity : number, inputSize : number, nbits : number )
     {
@@ -70,19 +71,20 @@ class Wisard
 
     public training(discriminatorClass : Number, input : String )
     {        
-        this.discriminators.get(discriminatorClass).training(input);
-       // console.log(this.discriminators.get(7).rams[0] );
+        this.discriminators.get(discriminatorClass).training(input);       
     }
 
-    public retrieve(input : String) : Array<Array<Number>>
+    public retrieve(input : String) : void
     {
         var similarityScores = new Array<Array<Number>>();
         this.discriminators.forEach(discriminator => {
-            discriminator.retrieve(input);            
+            similarityScores.push( discriminator.retrieve(input)); 
+                       
         });
-        return similarityScores;
+        console.log(similarityScores);
+        this.similarityScores = similarityScores;
+        
     }
-
 
 }
 
