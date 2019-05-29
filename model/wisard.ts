@@ -6,7 +6,8 @@ class Wisard
     classesQuantity: number;
     inputSize: number;
     mapping : Array<Array<number>>;
-    similarityScores : Array<Array<Number>>;
+    similarityScores : Map<Number,Array<Number>>;
+    possibleClasses: Array<Number>;
 
     constructor(classesQuantity : number, inputSize : number, nbits : number )
     {
@@ -14,9 +15,10 @@ class Wisard
         this.discriminators = new Map(); 
         this.inputSize = inputSize; 
         this.mapping = this.getMapping(nbits);
+        
         for(var i = 0; i < this.classesQuantity; i++)
         {
-            var discriminator : Discriminator = new Discriminator(this.mapping);
+            var discriminator : Discriminator = new Discriminator(i, this.mapping);
             this.discriminators.set(i, discriminator);
         }       
     }
@@ -54,7 +56,7 @@ class Wisard
     {
         var input = new Array(this.inputSize);
         var j, x, i : number;
-
+        
         for( i = 0; i< this.inputSize; i++)
         {
             input[i] = i;
@@ -76,15 +78,47 @@ class Wisard
 
     public retrieve(input : String) : void
     {
-        var similarityScores = new Array<Array<Number>>();
+        this.similarityScores = new Map();
+        
         this.discriminators.forEach(discriminator => {
-            similarityScores.push( discriminator.retrieve(input)); 
+            this.similarityScores.set(discriminator.classId, discriminator.retrieve(input));            
                        
         });
-        console.log(similarityScores);
-        this.similarityScores = similarityScores;
+        console.log(this.similarityScores);
+        
         
     }
+
+    public bleaching() : void
+    {
+        this.fillPossibleClassesArray();
+        var count = this.discriminators.get(0).rams.length;
+        while(this.possibleClasses.length > 1 && count > 0 )
+        {
+            //TO DO 
+            /* Em cada iteração pegar o menor score de cada classe 
+            e uso como limiar do bleaching o maior deles. As rams com 
+            score maior ou igual a esse limiar recebem 1 e 0 se forem
+            menores. A resposta de cada discriminador é a soma das quantidade
+            de rams com score 1, achar a maior resposta. A menor resposta
+            aceitável leva em consideração a confiança definida entre 0 e 1
+            rmin = (1 - conf)rmax. Eliminar todas as classes com resposta menor
+            que rmin. Repetir o processo desconsiderando os menores scores escolhidos
+            anteriormente */  
+            
+        }        
+    }
+
+    public fillPossibleClassesArray() : Array<Number>
+    {
+        
+        for (let i = 0; i < this.classesQuantity; i++) {
+            
+            this.possibleClasses.push(i);
+        }
+        return this.possibleClasses;
+    }
+
 
 }
 

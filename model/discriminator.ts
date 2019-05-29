@@ -4,11 +4,13 @@ class Discriminator
 {    
     rams: Array<Ram>;
     mapping: Array<Array<number>>
+    classId: Number;
     
-    constructor(mapping : Array<Array<number>>) 
+    constructor(classId: Number, mapping : Array<Array<number>>) 
     {
         this.mapping = mapping;   
         this.rams = [];
+        this.classId = classId;
         for(var i=0; i < mapping.length; i++)
         {                
             this.rams.push(new Ram());
