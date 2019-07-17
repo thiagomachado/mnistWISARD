@@ -6,7 +6,8 @@ var fs = require('fs'),
     mnistTestFile : String = "mnist_test.csv",
     fileArray : Array<any> = [],
     wisard = new Wisard(10,784,40),
-    threshold = 3;
+    threshold = 3,
+    confusionMatrix :Array<Array<number>> = new Array(10);
 
 class StartUp
 {
@@ -27,9 +28,39 @@ class StartUp
             }
                                     
         }
-        var testFileArray = this.readMnistFile(mnistTestFile);
-        var firstLineTestFileArray = this.applyThreshold(testFileArray[0].split(","));                
+        var testFileArray :Array<any> = this.readMnistFile(mnistTestFile);
+        this.initializeConfusionMatrix();
+        var expectedClass : number;
+        for(var i = 0; i < testFileArray.length; i++)
+        {
+            expectedClass = testFileArray[i].split(",")[0];
+            this.validateWisardClasses(this.applyThreshold(testFileArray[i].split(",")),expectedClass);
+        }
+        console.log(confusionMatrix); 
+    }
+    static initializeConfusionMatrix() 
+    {        
+        for(var i = 0; i < 10; i++)
+        {
+            confusionMatrix[i] = new Array(10);
+            confusionMatrix[i].fill(0,0,9);            
+        }
+    }
+
+    public static validateWisardClasses(firstLineTestFileArray: any, expectedClass : number) 
+    {
         wisard.retrieve(this.getInputArrayInTextWithoutClass(firstLineTestFileArray));
+        var wisardClass : number; 
+        if(wisard.possibleClasses.length > 1)
+        {
+            wisardClass = wisard.possibleClasses[Math.floor(Math.random()*wisard.possibleClasses.length)];
+        }
+        else
+        {
+            wisardClass = wisard.possibleClasses[0];
+        }
+
+        confusionMatrix[wisardClass][expectedClass] = confusionMatrix[wisardClass][expectedClass] + 1 ;
     }
 
     public static  readMnistFile(fileName : String) : Array<any>

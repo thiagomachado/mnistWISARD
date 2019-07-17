@@ -86,9 +86,9 @@ class Wisard
             this.ramsContents.set(discriminator.classId, discriminator.retrieve(input));            
                        
         });
-        console.log(this.ramsContents);
+        //console.log(this.ramsContents);
         this.bleaching();
-        console.log(this.possibleClasses);
+       // console.log(this.possibleClasses);
         
     }
 
@@ -100,8 +100,7 @@ class Wisard
         while(this.possibleClasses.length > 1 
             && this.ramsContents.values().next().value.length > 0 )
         {
-            //console.log(this.ramsContents.get(this.possibleClasses[0]).length);
-            //TO DO 
+            //console.log(this.ramsContents.get(this.possibleClasses[0]).length);            
             /* Em cada iteração pegar o menor score de cada classe 
             e uso como limiar do bleaching o maior deles. As rams com 
             score maior ou igual a esse limiar recebem 1 e 0 se forem
