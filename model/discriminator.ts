@@ -4,9 +4,9 @@ class Discriminator
 {    
     rams: Array<Ram>;
     mapping: Array<Array<number>>
-    classId: Number;
+    classId: number;
     
-    constructor(classId: Number, mapping : Array<Array<number>>) 
+    constructor(classId: number, mapping : Array<Array<number>>) 
     {
         this.mapping = mapping;   
         this.rams = [];
@@ -51,9 +51,9 @@ class Discriminator
         return addresses;
     }
 
-    public retrieve(input : String) : Array<Number>
+    public retrieve(input : String) : Array<number>
     {
-        var ramsContent = new Array<Number>();
+        var ramsContent = new Array<number>();
         var addresses = this.convertInputToAddresses(input);
         for(var i = 0; addresses.length > i; i++)
         {

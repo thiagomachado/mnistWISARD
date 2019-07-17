@@ -5,7 +5,7 @@ var fs = require('fs'),
     mnistTrainFile : String = "mnist_train.csv",
     mnistTestFile : String = "mnist_test.csv",
     fileArray : Array<any> = [],
-    wisard = new Wisard(10,784,4),
+    wisard = new Wisard(10,784,40),
     threshold = 3;
 
 class StartUp
@@ -28,7 +28,7 @@ class StartUp
                                     
         }
         var testFileArray = this.readMnistFile(mnistTestFile);
-        var firstLineTestFileArray = this.applyThreshold(testFileArray[0].split(","));
+        var firstLineTestFileArray = this.applyThreshold(testFileArray[0].split(","));                
         wisard.retrieve(this.getInputArrayInTextWithoutClass(firstLineTestFileArray));
     }
 
@@ -56,7 +56,7 @@ class StartUp
     }
 
     public static getInputArrayInTextWithoutClass(fileLineArray:Array<any>) :String
-    {
+    {        
         return  fileLineArray.slice(1,fileLineArray.length).join("");
     }
 
