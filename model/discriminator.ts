@@ -5,6 +5,7 @@ class Discriminator
     rams: Array<Ram>;
     mapping: Array<Array<number>>
     classId: number;
+    trainingExamples : number;
     
     constructor(classId: number, mapping : Array<Array<number>>) 
     {
@@ -66,7 +67,40 @@ class Discriminator
                 ramsContent.push(0);  
             }            
         }
+
         return ramsContent;
+    }
+
+    public retrieveLog(input : String, offset : number) : number
+    {
+        var ramsContent = new Array<number>();
+        var addresses = this.convertInputToAddresses(input);
+        for(var i = 0; addresses.length > i; i++)
+        {
+            if(this.rams[i].addresses.has(addresses[i]))
+            {
+                ramsContent.push(this.rams[i].addresses.get(addresses[i]));
+            }
+            else
+            {
+                ramsContent.push(0);  
+            }            
+        }
+
+        var score = 0;
+        ramsContent.forEach(ramContent => {
+            if(ramContent == 0)
+            {
+                ramContent = -addresses[0].length;
+            }
+            else{
+                ramContent = Math.log2(ramContent)
+            }
+            score +=ramContent
+        });
+
+
+        return score - (ramsContent.length * (this.trainingExamples + 1) );
     }
    
 }

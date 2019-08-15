@@ -7,17 +7,22 @@ class Wisard
     inputSize: number;
     mapping : Array<Array<number>>;
     ramsContents : Map<number,Array<number>>;
+    logRamsContents : Map<number,number>;
     possibleClasses: Array<number>;
     possibleClassesScoreMap : Map<number, number>;
-    confidence : number = 0.5; //must be a value between 0 and 1
+    confidence : number = 0; //must be a value between 0 and 1
+    trainingExamplesClasses : Array<number> = Array(10);
+    offset : number;
 
-    constructor(classesQuantity : number, inputSize : number, nbits : number )
+    constructor(classesQuantity : number, inputSize : number, nbits : number, offset : number )
     {
         this.classesQuantity = classesQuantity;
         this.discriminators = new Map(); 
         this.inputSize = inputSize; 
         this.mapping = this.getMapping(nbits);
-        
+        this.trainingExamplesClasses.fill(0,0,10);
+        this.offset = offset;
+
         for(var i = 0; i < this.classesQuantity; i++)
         {
             var discriminator : Discriminator = new Discriminator(i, this.mapping);
@@ -75,7 +80,8 @@ class Wisard
 
     public training(discriminatorClass : number, input : String )
     {        
-        this.discriminators.get(discriminatorClass).training(input);       
+        this.discriminators.get(discriminatorClass).training(input);
+        this.trainingExamplesClasses[discriminatorClass] += 1;       
     }
 
     public retrieve(input : String) : void
@@ -83,8 +89,9 @@ class Wisard
         this.ramsContents = new Map();
         
         this.discriminators.forEach(discriminator => {
+            discriminator.trainingExamples = this.trainingExamplesClasses[discriminator.classId];
             this.ramsContents.set(discriminator.classId, discriminator.retrieve(input));            
-                       
+            
         });
         //console.log(this.ramsContents);
         this.bleaching();
@@ -92,9 +99,22 @@ class Wisard
         
     }
 
+    public retrieveLog(input : String) : void
+    {
+        this.logRamsContents = new Map();
+        
+        this.discriminators.forEach(discriminator => {
+            discriminator.trainingExamples = this.trainingExamplesClasses[discriminator.classId];
+            this.logRamsContents.set(discriminator.classId, discriminator.retrieveLog(input,this.offset));            
+            
+        });
+        this.applyloglikelihood();
+                   
+    }
+
     public bleaching() : void
     {
-        this.fillPossibleClassesArray();        
+        this.fillPossibleClassesArray();
         var lowestContentsMap : Map<number, number>;
         
         while(this.possibleClasses.length > 1 
@@ -118,6 +138,20 @@ class Wisard
            this.updatePossibleClasses(lowestContentsMap);
             
         }        
+    }
+
+    public applyloglikelihood()
+    {
+        var max = Number.NEGATIVE_INFINITY;
+        var classNumber;
+        this.logRamsContents.forEach((ramContent : number, classId : number)=> {
+            if(ramContent > max)
+            {
+                max = ramContent;
+                classNumber = classId;
+            }
+        });
+        this.possibleClasses = [classNumber];
     }
 
     public fillPossibleClassesArray() : Array<number>

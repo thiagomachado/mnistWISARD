@@ -5,9 +5,10 @@ var fs = require('fs'),
     mnistTrainFile : String = "mnist_train.csv",
     mnistTestFile : String = "mnist_test.csv",
     fileArray : Array<any> = [],
-    wisard = new Wisard(10,784,40),
-    threshold = 3,
-    confusionMatrix :Array<Array<number>> = new Array(10);
+    wisard = new Wisard(10,784,40,0.125),
+    threshold : number = 3,
+    confusionMatrix :Array<Array<number>> = new Array(10),
+    trace = 0;
 
 class StartUp
 {
@@ -24,32 +25,34 @@ class StartUp
             
             if(lineArray.length > 1)
             {
-                wisard.training(parseInt(lineArray[0]),this.getInputArrayInTextWithoutClass(lineArray));
+                wisard.training(parseInt(lineArray[0]),this.getInputArrayInTextWithoutClass(lineArray));                
             }
                                     
         }
+        console.log(wisard.trainingExamplesClasses);
         var testFileArray :Array<any> = this.readMnistFile(mnistTestFile);
         this.initializeConfusionMatrix();
         var expectedClass : number;
-        for(var i = 0; i < testFileArray.length; i++)
+        for(var i = 0; i < testFileArray.length - 1; i++)
         {
             expectedClass = testFileArray[i].split(",")[0];
             this.validateWisardClasses(this.applyThreshold(testFileArray[i].split(",")),expectedClass);
         }
         console.log(confusionMatrix); 
+        console.log(trace);
     }
     static initializeConfusionMatrix() 
     {        
         for(var i = 0; i < 10; i++)
         {
             confusionMatrix[i] = new Array(10);
-            confusionMatrix[i].fill(0,0,9);            
+            confusionMatrix[i].fill(0,0,10);
         }
     }
 
     public static validateWisardClasses(firstLineTestFileArray: any, expectedClass : number) 
     {
-        wisard.retrieve(this.getInputArrayInTextWithoutClass(firstLineTestFileArray));
+        wisard.retrieveLog(this.getInputArrayInTextWithoutClass(firstLineTestFileArray));
         var wisardClass : number; 
         if(wisard.possibleClasses.length > 1)
         {
@@ -61,6 +64,10 @@ class StartUp
         }
 
         confusionMatrix[wisardClass][expectedClass] = confusionMatrix[wisardClass][expectedClass] + 1 ;
+        if (wisardClass == expectedClass)
+        {
+            trace = trace + 1;
+        }
     }
 
     public static  readMnistFile(fileName : String) : Array<any>
@@ -75,7 +82,7 @@ class StartUp
     {
         for(var j = 1; fileLineArray.length > j; j++)
         {
-            if(fileLineArray[j].length==threshold)
+            if(fileLineArray[j].length >= threshold)
             {
                 fileLineArray[j] = "1";                
             }else
