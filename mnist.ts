@@ -10,6 +10,7 @@ var fs = require('fs'),
     confusionMatrix :Array<Array<number>> = new Array(10),
     trace = 0;
 
+
 class StartUp
 {
     
@@ -30,6 +31,7 @@ class StartUp
                                     
         }
         console.log(wisard.trainingExamplesClasses);
+        
         var testFileArray :Array<any> = this.readMnistFile(mnistTestFile);
         this.initializeConfusionMatrix();
         var expectedClass : number;

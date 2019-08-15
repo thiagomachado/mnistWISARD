@@ -100,7 +100,7 @@ class Discriminator
         });
 
 
-        return score - (ramsContent.length * (this.trainingExamples + 1) );
+        return score - (ramsContent.length * Math.log2(this.trainingExamples + 1) );
     }
    
 }
